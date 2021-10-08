@@ -5,10 +5,13 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "antd/dist/antd.css";
 import "./App.css";
+import Route from "./Routes/routes";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Route>
+      <App />
+    </Route>
   </React.StrictMode>,
   document.getElementById("root")
 );

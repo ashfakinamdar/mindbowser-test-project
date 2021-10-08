@@ -1,10 +1,10 @@
 import "./App.css";
-import Route from "./Routes/routes";
+import UserListing from "./components/User_listing";
 
 function App() {
   return (
     <div className="App">
-      <Route />
+      <UserListing />
     </div>
   );
 }
