@@ -9,23 +9,32 @@ import {
 } from "antd";
 import { useState } from "react";
 import "../style/style.css";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { getSchools } from "./../redux/actions/userActions";
 
 function AddUser() {
   const [user, setUsers] = useState([]);
   const { TextArea } = Input;
   const { Option } = Select;
   const { Search } = Input;
-
+  const schools = useSelector((state) => state);
+  const dispatch = useDispatch();
   const otherSelected = () => {};
 
-  const searchSchools = (e) => {
-    fetch(`http://universities.hipolabs.com/search?name=${e}`)
-      .then((response) => response.json())
-      .then((json) => setUsers(json));
+  const searchSchools = async (e) => {
+    const response = await axios
+      .get(`http://universities.hipolabs.com/search?name=${e}`)
+      .catch((err) => {
+        console.log("fff", err);
+      });
+    dispatch(getSchools(response));
   };
 
   return (
     <div className="container">
+      {console.log("ghg", schools)}
       <Form layout="vertical">
         <Form.Item
           label="Name"

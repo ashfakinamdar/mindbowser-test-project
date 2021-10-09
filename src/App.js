@@ -1,4 +1,3 @@
-import "./App.css";
 import UserListing from "./components/User_listing";
 
 function App() {
