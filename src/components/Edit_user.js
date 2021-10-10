@@ -17,16 +17,19 @@ import {
   createUser,
   editUser,
 } from "./../redux/actions/userActions";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { useEffect } from "react";
 
-function AddUser() {
+function EditUserDetails() {
   const { TextArea } = Input;
   const { Option } = Select;
   const { Search } = Input;
   let history = useHistory();
+  let { id } = useParams();
   const schools = useSelector((state) => state.allSchools.schools.data);
+  const user = useSelector((state) => state.createUser.user);
   const dispatch = useDispatch();
+  const [form] = Form.useForm();
 
   const searchSchools = async (e) => {
     const response = await axios
@@ -45,14 +48,26 @@ function AddUser() {
     });
   };
 
-  useEffect((props) => {
-    console.log("dsv", props);
-    // dispatch(editUser(props.id));
-  }, []);
+  const setfields = () => {
+    form.setFieldsValue({ name: user.name });
+  };
+
+  useEffect(() => {
+    dispatch(editUser(id));
+    setfields();
+  }, [form]);
 
   return (
     <div className="container">
-      <Form layout="vertical" onFinish={onFinish}>
+      {console.log("df,", user)}
+      <Form
+        layout="vertical"
+        onFinish={onFinish}
+        form={form}
+        initialValues={{
+          name: user.name,
+        }}
+      >
         <Form.Item
           label="Name"
           name="name"
@@ -184,4 +199,4 @@ function AddUser() {
   );
 }
 
-export default AddUser;
+export default EditUserDetails;

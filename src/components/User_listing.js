@@ -13,7 +13,6 @@ function UserListing() {
   const editUser = (id) => {
     history.push({
       pathname: `/edit-user/${id}`,
-      state: id,
     });
   };
   const columns = [
