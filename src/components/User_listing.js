@@ -72,7 +72,6 @@ function UserListing() {
             Edit
           </Button>
           <Button type="primary">Delete</Button>
-          {/* <Button type="primary"></Button> */}
         </span>
       ),
     },

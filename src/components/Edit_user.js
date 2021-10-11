@@ -1,13 +1,5 @@
-import {
-  Form,
-  Input,
-  Button,
-  Checkbox,
-  DatePicker,
-  InputNumber,
-  Select,
-} from "antd";
-import { nanoid } from "nanoid";
+import { Form, Input, Button, Checkbox, DatePicker, Select } from "antd";
+
 import "../style/style.css";
 import moment from "moment";
 import { useSelector } from "react-redux";
@@ -28,7 +20,6 @@ function EditUserDetails() {
   const { Search } = Input;
   let history = useHistory();
   let { id } = useParams();
-  const [name, setName] = useState("");
   const [hobbies, setHobbies] = useState([]);
   const schools = useSelector((state) => state.allSchools.schools.data);
   const user = useSelector((state) => state.createUser.user);
@@ -94,10 +85,6 @@ function EditUserDetails() {
       hobbies: user.hobbies,
     });
   }, [user]);
-
-  // useEffect(() => {
-
-  // }, [user]);
 
   return (
     <div className="container">
@@ -175,21 +162,13 @@ function EditUserDetails() {
             },
           ]}
         >
-          <Select
-          // defaultValue="lucy"
-          // style={{ width: 120 }}
-          // onChange={handleChange}
-          >
+          <Select>
             <Option value="Male">Male</Option>
             <Option value="Female">Female</Option>
             <Option value="Other">Other</Option>
           </Select>
         </Form.Item>
-        <Search
-          placeholder="Search College"
-          onSearch={searchSchools}
-          // enterButton
-        />
+        <Search placeholder="Search College" onSearch={searchSchools} />
         <Form.Item
           label="College"
           name="college"
@@ -200,11 +179,7 @@ function EditUserDetails() {
             },
           ]}
         >
-          <Select
-          // defaultValue="lucy"
-          // style={{ width: 120 }}
-          // onChange={handleChange}
-          >
+          <Select>
             {schools
               ? schools.map((schools, i) => (
                   <Option value={schools.name} key={i}>
@@ -215,26 +190,7 @@ function EditUserDetails() {
           </Select>
         </Form.Item>
         <Form.Item label="Hobbies" name="hobbies">
-          {/* <Checkbox.Group>
-            {" "}
-            <Checkbox value="reading" style={{ lineHeight: "32px" }}>
-              Reading
-            </Checkbox>
-            <Checkbox value="gaming" style={{ lineHeight: "32px" }}>
-              Gaming
-            </Checkbox>
-            <Checkbox value="travelling" style={{ lineHeight: "32px" }}>
-              Travelling
-            </Checkbox>
-            <Checkbox value="drawing" style={{ lineHeight: "32px" }}>
-              Drawing
-            </Checkbox>
-          </Checkbox.Group> */}
-          <Checkbox.Group
-            options={options}
-            // defaultValue={["Apple"]}
-            onChange={onChangeSelect}
-          />
+          <Checkbox.Group options={options} onChange={onChangeSelect} />
         </Form.Item>
 
         <Form.Item
@@ -256,7 +212,6 @@ function EditUserDetails() {
                 ))
               : ""}
           </Select>
-          {/* <Input value={hobbies} disabled /> */}
         </Form.Item>
 
         <Form.Item>
