@@ -57,7 +57,7 @@ function UserListing() {
     {
       title: "Hobbies",
       key: "hobbies",
-      dataIndex: "hobbies",
+      render: (text, record) => <span>{record.hobbies.join(", ")}</span>,
     },
     {
       title: "Action",
@@ -71,7 +71,7 @@ function UserListing() {
           >
             Edit
           </Button>
-          <Button type="primary">Delete</Button>
+          <Button type="danger">Delete</Button>
         </span>
       ),
     },

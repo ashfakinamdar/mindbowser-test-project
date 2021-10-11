@@ -26,13 +26,13 @@ function AddUser() {
   const { Option } = Select;
   const { Search } = Input;
   let history = useHistory();
-  const [addHobbies, setAddHobbies] = useState(false);
-  const [otherHobbies, setOtherHobbies] = useState([]);
-  const [list, setList] = useState([]);
+  const [values, setValues] = useState("");
   const [hobbies, setHobbies] = useState([]);
+  const [otherHobbies, setOtherHobbies] = useState([]);
   const [date, setDate] = useState("");
   const schools = useSelector((state) => state.allSchools.schools.data);
   const dispatch = useDispatch();
+  const [form] = Form.useForm();
 
   const searchSchools = async (e) => {
     const response = await axios
@@ -62,6 +62,18 @@ function AddUser() {
     });
   };
 
+  const addHobby = () => {
+    let arr = otherHobbies;
+    arr.push(values);
+    setOtherHobbies(arr);
+    {
+      console.log("dvf", otherHobbies);
+    }
+  };
+  const getHobbyName = (e) => {
+    setValues(e.target.value);
+  };
+
   const options = [
     { label: "Reading", value: "Reading" },
     { label: "Gaming", value: "Gaming" },
@@ -69,11 +81,12 @@ function AddUser() {
     { label: "Drawing", value: "Drawing" },
   ];
 
-  const onChangeCheckbox = (e) => {
-    setAddHobbies(e.target.checked);
-  };
+  // const onChangeCheckbox = (e) => {
+  //   setAddHobbies(e.target.checked);
+  // };
 
   const onChangeSelect = (checked) => {
+    console.log("cdasasca", checked);
     setHobbies(checked);
   };
 
@@ -189,7 +202,10 @@ function AddUser() {
               : ""}
           </Select>
         </Form.Item>
-
+        <Form.Item label="Collegesssss" name="hobbyname">
+          <Input onChange={getHobbyName} />
+        </Form.Item>
+        <Button onClick={addHobby}>sxsx</Button>
         <Form.Item label="Hobbies" name="hobbies">
           <Checkbox.Group
             options={options}
@@ -216,6 +232,7 @@ function AddUser() {
                 ))
               : ""}
           </Select>
+          {otherHobbies ? otherHobbies.map((hobby, i) => <li>{hobby}</li>) : ""}
           {/* <Input value={hobbies} disabled /> */}
         </Form.Item>
 
