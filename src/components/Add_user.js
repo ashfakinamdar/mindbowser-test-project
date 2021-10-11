@@ -19,12 +19,18 @@ import {
 } from "./../redux/actions/userActions";
 import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
+import { useState } from "react";
 
 function AddUser() {
   const { TextArea } = Input;
   const { Option } = Select;
   const { Search } = Input;
   let history = useHistory();
+  const [addHobbies, setAddHobbies] = useState(false);
+  const [otherHobbies, setOtherHobbies] = useState([]);
+  const [list, setList] = useState([]);
+  const [hobbies, setHobbies] = useState([]);
+  const [date, setDate] = useState("");
   const schools = useSelector((state) => state.allSchools.schools.data);
   const dispatch = useDispatch();
 
@@ -37,21 +43,47 @@ function AddUser() {
     dispatch(getSchools(response));
   };
   const onFinish = (values) => {
-    values.id = nanoid();
-    // let userDetails = [values];
-    dispatch(createUser(values));
+    var payload = {
+      address: values.address,
+      birthDate: date,
+      college: values.college,
+      gender: values.gender,
+      id: nanoid(),
+      name: values.name,
+      phone: values.phoneNumber,
+      hobbies: values.hobbies,
+      email: values.email,
+    };
+    console.log("sdv", payload);
+
+    dispatch(createUser(payload));
     history.push({
       pathname: "/user-listing",
     });
   };
 
-  useEffect((props) => {
-    console.log("dsv", props);
-    // dispatch(editUser(props.id));
-  }, []);
+  const options = [
+    { label: "Reading", value: "Reading" },
+    { label: "Gaming", value: "Gaming" },
+    { label: "Travelling", value: "Travelling" },
+    { label: "Drawing", value: "Drawing" },
+  ];
+
+  const onChangeCheckbox = (e) => {
+    setAddHobbies(e.target.checked);
+  };
+
+  const onChangeSelect = (checked) => {
+    setHobbies(checked);
+  };
+
+  const dateOnChange = (date, dateString) => {
+    setDate(dateString);
+  };
 
   return (
     <div className="container">
+      <h1>Add User</h1>
       <Form layout="vertical" onFinish={onFinish}>
         <Form.Item
           label="Name"
@@ -76,7 +108,7 @@ function AddUser() {
             },
           ]}
         >
-          <DatePicker />
+          <DatePicker onChange={dateOnChange} />
         </Form.Item>
 
         <Form.Item
@@ -102,7 +134,7 @@ function AddUser() {
             },
           ]}
         >
-          <InputNumber />
+          <Input type="number" />
         </Form.Item>
         <Form.Item
           label="Address"
@@ -126,11 +158,7 @@ function AddUser() {
             },
           ]}
         >
-          <Select
-          // defaultValue="lucy"
-          // style={{ width: 120 }}
-          // onChange={handleChange}
-          >
+          <Select>
             <Option value="Male">Male</Option>
             <Option value="Female">Female</Option>
             <Option value="Other">Other</Option>
@@ -151,11 +179,7 @@ function AddUser() {
             },
           ]}
         >
-          <Select
-          // defaultValue="lucy"
-          // style={{ width: 120 }}
-          // onChange={handleChange}
-          >
+          <Select>
             {schools
               ? schools.map((schools, i) => (
                   <Option value={schools.name} key={i}>
@@ -166,12 +190,33 @@ function AddUser() {
           </Select>
         </Form.Item>
 
-        <Form.Item label="Hobbies">
-          <Checkbox>Reading</Checkbox>
-          <Checkbox>Gaming</Checkbox>
-          <Checkbox>Traveling</Checkbox>
-          <Checkbox>Drawing</Checkbox>
-          <Checkbox>other</Checkbox>
+        <Form.Item label="Hobbies" name="hobbies">
+          <Checkbox.Group
+            options={options}
+            // defaultValue={["Apple"]}
+            onChange={onChangeSelect}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Hobbies"
+          name="hobbies"
+          rules={[
+            {
+              required: true,
+              message: "Please select atleast one hobbie!",
+            },
+          ]}
+        >
+          <Select mode="multiple">
+            {hobbies
+              ? hobbies.map((hobby, i) => (
+                  <Option key={i} disabled>
+                    {hobby}
+                  </Option>
+                ))
+              : ""}
+          </Select>
+          {/* <Input value={hobbies} disabled /> */}
         </Form.Item>
 
         <Form.Item>

@@ -19,3 +19,10 @@ export const editUser = (id) => {
     payload: id,
   };
 };
+
+export const updateUser = (userDetails) => {
+  return {
+    type: actionType.UPDATE_USER,
+    payload: userDetails,
+  };
+};

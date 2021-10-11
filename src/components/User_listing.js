@@ -1,6 +1,7 @@
 import { Button, Table } from "antd";
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
+import "../style/style.css";
 
 function UserListing() {
   let history = useHistory();
@@ -18,6 +19,7 @@ function UserListing() {
   const columns = [
     {
       title: "Name",
+      width: 100,
       key: "name",
       dataIndex: "name",
     },
@@ -55,14 +57,18 @@ function UserListing() {
     {
       title: "Hobbies",
       key: "hobbies",
-      dataIndex: "gender",
+      dataIndex: "hobbies",
     },
     {
       title: "Action",
       key: "action",
       render: (text, record) => (
         <span>
-          <Button type="primary" onClick={() => editUser(record.id)}>
+          <Button
+            type="primary"
+            onClick={() => editUser(record.id)}
+            className="mb-10"
+          >
             Edit
           </Button>
           <Button type="primary">Delete</Button>
@@ -72,15 +78,18 @@ function UserListing() {
     },
   ];
   return (
-    <div>
-      {console.log("vd", userDetails)}
-      <Button type="primary" onClick={redirectToUserDetails}>
-        Add User
-      </Button>
+    <div className="main">
+      <h1>User Listing</h1>
+      <div className="alignRight">
+        <Button type="primary" onClick={redirectToUserDetails}>
+          Add User
+        </Button>
+      </div>
       <Table
         columns={columns}
         dataSource={userDetails}
         rowKey={userDetails.id}
+        className="listingTable"
       />
     </div>
   );

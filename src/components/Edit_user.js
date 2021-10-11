@@ -9,14 +9,16 @@ import {
 } from "antd";
 import { nanoid } from "nanoid";
 import "../style/style.css";
+import moment from "moment";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import {
   getSchools,
-  createUser,
   editUser,
+  updateUser,
 } from "./../redux/actions/userActions";
+import { useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -26,9 +28,12 @@ function EditUserDetails() {
   const { Search } = Input;
   let history = useHistory();
   let { id } = useParams();
+  const [name, setName] = useState("");
+  const [hobbies, setHobbies] = useState([]);
   const schools = useSelector((state) => state.allSchools.schools.data);
   const user = useSelector((state) => state.createUser.user);
   const dispatch = useDispatch();
+  const [date, setDate] = useState("");
   const [form] = Form.useForm();
 
   const searchSchools = async (e) => {
@@ -39,35 +44,64 @@ function EditUserDetails() {
       });
     dispatch(getSchools(response));
   };
+  const onChangeSelect = (checked) => {
+    setHobbies(checked);
+  };
+
   const onFinish = (values) => {
-    values.id = nanoid();
-    // let userDetails = [values];
-    dispatch(createUser(values));
+    if (user != null) {
+      Object.assign(values, {
+        name: values.name,
+        email: values.email,
+        phone: values.phoneNumber,
+        address: values.address,
+        gender: values.gender,
+        college: values.college,
+        id: user.id,
+        hobbies: values.hobbies,
+        birthDate: moment(user.birthDate).format("YYYY-MM-DD"),
+      });
+    }
+
+    dispatch(updateUser(values));
     history.push({
       pathname: "/user-listing",
     });
   };
 
-  const setfields = () => {
-    form.setFieldsValue({ name: user.name });
+  const options = [
+    { label: "Reading", value: "Reading" },
+    { label: "Gaming", value: "Gaming" },
+    { label: "Travelling", value: "Travelling" },
+    { label: "Drawing", value: "Drawing" },
+  ];
+
+  const dateOnChange = (date, dateString) => {
+    setDate(dateString);
   };
 
   useEffect(() => {
     dispatch(editUser(id));
-    setfields();
-  }, [form]);
+    console.log("dvfs", moment(user.birthDate));
+    form.setFieldsValue({
+      name: user.name,
+      email: user.email,
+      phoneNumber: user.phone,
+      address: user.address,
+      gender: user.gender,
+      college: user.college,
+      birthDate: moment(user.birthDate),
+      hobbies: user.hobbies,
+    });
+  }, [user]);
+
+  // useEffect(() => {
+
+  // }, [user]);
 
   return (
     <div className="container">
-      {console.log("df,", user)}
-      <Form
-        layout="vertical"
-        onFinish={onFinish}
-        form={form}
-        initialValues={{
-          name: user.name,
-        }}
-      >
+      <Form layout="vertical" onFinish={onFinish} form={form}>
         <Form.Item
           label="Name"
           name="name"
@@ -91,7 +125,7 @@ function EditUserDetails() {
             },
           ]}
         >
-          <DatePicker />
+          <DatePicker onChange={dateOnChange} />
         </Form.Item>
 
         <Form.Item
@@ -117,7 +151,7 @@ function EditUserDetails() {
             },
           ]}
         >
-          <InputNumber />
+          <Input type="number" />
         </Form.Item>
         <Form.Item
           label="Address"
@@ -180,13 +214,49 @@ function EditUserDetails() {
               : ""}
           </Select>
         </Form.Item>
+        <Form.Item label="Hobbies" name="hobbies">
+          {/* <Checkbox.Group>
+            {" "}
+            <Checkbox value="reading" style={{ lineHeight: "32px" }}>
+              Reading
+            </Checkbox>
+            <Checkbox value="gaming" style={{ lineHeight: "32px" }}>
+              Gaming
+            </Checkbox>
+            <Checkbox value="travelling" style={{ lineHeight: "32px" }}>
+              Travelling
+            </Checkbox>
+            <Checkbox value="drawing" style={{ lineHeight: "32px" }}>
+              Drawing
+            </Checkbox>
+          </Checkbox.Group> */}
+          <Checkbox.Group
+            options={options}
+            // defaultValue={["Apple"]}
+            onChange={onChangeSelect}
+          />
+        </Form.Item>
 
-        <Form.Item label="Hobbies">
-          <Checkbox>Reading</Checkbox>
-          <Checkbox>Gaming</Checkbox>
-          <Checkbox>Traveling</Checkbox>
-          <Checkbox>Drawing</Checkbox>
-          <Checkbox>other</Checkbox>
+        <Form.Item
+          label="Hobbies"
+          name="hobbies"
+          rules={[
+            {
+              required: true,
+              message: "Please select atleast one hobbie!",
+            },
+          ]}
+        >
+          <Select mode="multiple">
+            {hobbies
+              ? hobbies.map((hobby, i) => (
+                  <Option key={i} disabled>
+                    {hobby}
+                  </Option>
+                ))
+              : ""}
+          </Select>
+          {/* <Input value={hobbies} disabled /> */}
         </Form.Item>
 
         <Form.Item>
