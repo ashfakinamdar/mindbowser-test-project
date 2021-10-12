@@ -4,21 +4,18 @@ import {
   Button,
   Checkbox,
   DatePicker,
-  InputNumber,
+  Spin,
   Select,
+  notification,
+  Tag,
 } from "antd";
 import { nanoid } from "nanoid";
 import "../style/style.css";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import {
-  getSchools,
-  createUser,
-  editUser,
-} from "./../redux/actions/userActions";
+import { getSchools, createUser } from "./../redux/actions/userActions";
 import { useHistory } from "react-router-dom";
-import { useEffect } from "react";
 import { useState } from "react";
 
 function AddUser() {
@@ -26,21 +23,47 @@ function AddUser() {
   const { Option } = Select;
   const { Search } = Input;
   let history = useHistory();
+  const [hobbyOptions, setHobbyOptions] = useState([
+    { label: "Reading", value: "Reading" },
+    { label: "Gaming", value: "Gaming" },
+    { label: "Travelling", value: "Travelling" },
+    { label: "Drawing", value: "Drawing" },
+  ]);
   const [values, setValues] = useState("");
   const [hobbies, setHobbies] = useState([]);
-  const [otherHobbies, setOtherHobbies] = useState([]);
   const [date, setDate] = useState("");
+  const [foundCollege, setFoundCollege] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [showOtherHobby, setShowOtherHobby] = useState(false);
   const schools = useSelector((state) => state.allSchools.schools.data);
+  const userDetails = useSelector((state) => state.createUser.userDetails);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
 
   const searchSchools = async (e) => {
-    const response = await axios
+    setLoader(true);
+    let response = [];
+    response = await axios
       .get(`http://universities.hipolabs.com/search?name=${e}`)
       .catch((err) => {
         console.log("errors", err);
       });
-    dispatch(getSchools(response));
+    if (
+      response &&
+      response.data &&
+      response.data.length &&
+      response.data.length > 0
+    ) {
+      dispatch(getSchools(response));
+      setFoundCollege(true);
+      setLoader(false);
+    } else {
+      notification.error({
+        message: "Failed",
+        description: "No schools found",
+      });
+      setLoader(false);
+    }
   };
   const onFinish = (values) => {
     var payload = {
@@ -54,194 +77,228 @@ function AddUser() {
       hobbies: values.hobbies,
       email: values.email,
     };
-    console.log("sdv", payload);
 
     dispatch(createUser(payload));
     history.push({
       pathname: "/user-listing",
     });
+    notification.success({
+      message: "Success",
+      description: "User Added Successfully",
+    });
   };
 
   const addHobby = () => {
-    let arr = otherHobbies;
-    arr.push(values);
-    setOtherHobbies(arr);
-    {
-      console.log("dvf", otherHobbies);
+    if (values) {
+      if (hobbies.includes(values)) {
+        notification.error({
+          message: "Failed",
+          description: "Hobby already exists",
+        });
+        return;
+      } else {
+        setHobbyOptions(hobbyOptions.concat({ label: values, value: values }));
+        hobbies.push(values);
+        setHobbies(hobbies);
+      }
+    } else {
+      notification.warning({
+        message: "Failed",
+        description: "Please enter a hobby",
+      });
     }
+
+    setValues("");
   };
   const getHobbyName = (e) => {
     setValues(e.target.value);
   };
 
-  const options = [
-    { label: "Reading", value: "Reading" },
-    { label: "Gaming", value: "Gaming" },
-    { label: "Travelling", value: "Travelling" },
-    { label: "Drawing", value: "Drawing" },
-  ];
-
-  // const onChangeCheckbox = (e) => {
-  //   setAddHobbies(e.target.checked);
-  // };
-
   const onChangeSelect = (checked) => {
-    console.log("cdasasca", checked);
     setHobbies(checked);
   };
 
+  const onChangeOtherHobbieCheckbox = () => {
+    setShowOtherHobby(!showOtherHobby);
+  };
   const dateOnChange = (date, dateString) => {
     setDate(dateString);
   };
 
   return (
     <div className="container">
-      <h1>Add User</h1>
-      <Form layout="vertical" onFinish={onFinish}>
-        <Form.Item
-          label="Name"
-          name="name"
-          rules={[
-            {
-              required: true,
-              message: "Please input your name!",
-              whitespace: true,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Birth Date"
-          name="birthDate"
-          rules={[
-            {
-              required: true,
-              message: "Please select date!",
-            },
-          ]}
-        >
-          <DatePicker onChange={dateOnChange} />
-        </Form.Item>
+      <Spin spinning={loader}>
+        <h1>Add User</h1>
+        <Form layout="vertical" onFinish={onFinish} form={form}>
+          <Form.Item
+            label="Name"
+            name="name"
+            rules={[
+              {
+                required: true,
+                message: "Please input your name!",
+                whitespace: true,
+              },
+            ]}
+          >
+            <Input placeholder="Name" />
+          </Form.Item>
+          <Form.Item
+            label="Birth Date"
+            name="birthDate"
+            rules={[
+              {
+                required: true,
+                message: "Please select date!",
+              },
+            ]}
+          >
+            <DatePicker onChange={dateOnChange} format={"DD/MM/YYYY"} />
+          </Form.Item>
 
-        <Form.Item
-          label="Email"
-          name="email"
-          rules={[
-            {
-              required: true,
-              message: "This is not a valid email!",
-              type: "email",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Phone Number"
-          name="phoneNumber"
-          rules={[
-            {
-              required: true,
-              message: "Please input your phone number!",
-            },
-          ]}
-        >
-          <Input type="number" />
-        </Form.Item>
-        <Form.Item
-          label="Address"
-          name="address"
-          rules={[
-            {
-              required: true,
-              message: "Please input your Address!",
-            },
-          ]}
-        >
-          <TextArea />
-        </Form.Item>
-        <Form.Item
-          label="Gender"
-          name="gender"
-          rules={[
-            {
-              required: true,
-              message: "Please input your Gender!",
-            },
-          ]}
-        >
-          <Select>
-            <Option value="Male">Male</Option>
-            <Option value="Female">Female</Option>
-            <Option value="Other">Other</Option>
-          </Select>
-        </Form.Item>
-        <Search
-          placeholder="Search College"
-          onSearch={searchSchools}
-          // enterButton
-        />
-        <Form.Item
-          label="College"
-          name="college"
-          rules={[
-            {
-              required: true,
-              message: "Please select your College!",
-            },
-          ]}
-        >
-          <Select>
-            {schools
-              ? schools.map((schools, i) => (
-                  <Option value={schools.name} key={i}>
-                    {schools.name}
-                  </Option>
-                ))
-              : ""}
-          </Select>
-        </Form.Item>
-        <Form.Item label="Collegesssss" name="hobbyname">
-          <Input onChange={getHobbyName} />
-        </Form.Item>
-        <Button onClick={addHobby}>sxsx</Button>
-        <Form.Item label="Hobbies" name="hobbies">
-          <Checkbox.Group
-            options={options}
-            // defaultValue={["Apple"]}
-            onChange={onChangeSelect}
-          />
-        </Form.Item>
-        <Form.Item
-          label="Hobbies"
-          name="hobbies"
-          rules={[
-            {
-              required: true,
-              message: "Please select atleast one hobbie!",
-            },
-          ]}
-        >
-          <Select mode="multiple">
-            {hobbies
-              ? hobbies.map((hobby, i) => (
-                  <Option key={i} disabled>
-                    {hobby}
-                  </Option>
-                ))
-              : ""}
-          </Select>
-          {otherHobbies ? otherHobbies.map((hobby, i) => <li>{hobby}</li>) : ""}
-          {/* <Input value={hobbies} disabled /> */}
-        </Form.Item>
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[
+              {
+                required: true,
+                message: "This is not a valid email!",
+                type: "email",
+                whitespace: true,
+              },
+            ]}
+          >
+            <Input placeholder="Enter email" />
+          </Form.Item>
+          <Form.Item
+            label="Phone Number"
+            name="phoneNumber"
+            rules={[
+              {
+                required: true,
+                message: "Please input your phone number!",
+                whitespace: true,
+              },
+            ]}
+          >
+            <Input type="number" placeholder="Enter phone number" />
+          </Form.Item>
+          <Form.Item
+            label="Address"
+            name="address"
+            rules={[
+              {
+                required: true,
+                message: "Please input your Address!",
+                whitespace: true,
+              },
+            ]}
+          >
+            <TextArea placeholder="Enter address" />
+          </Form.Item>
+          <Form.Item
+            label="Gender"
+            name="gender"
+            rules={[
+              {
+                required: true,
+                message: "Please input your Gender!",
+              },
+            ]}
+          >
+            <Select placeholder="Select gender">
+              <Option value="Male">Male</Option>
+              <Option value="Female">Female</Option>
+              <Option value="Other">Other</Option>
+            </Select>
+          </Form.Item>
+          <div className="mb-10">
+            <Tag color="orange">
+              Please input your college name and click search icon
+            </Tag>
+          </div>
+          <Form.Item label="Search College">
+            <Search
+              placeholder="Search College"
+              onSearch={searchSchools}
+              // enterButton
+            />
+          </Form.Item>
+          <Form.Item
+            label="Select College"
+            name="college"
+            rules={[
+              {
+                required: true,
+                message: "Please select your College!",
+              },
+            ]}
+          >
+            <Select
+              placeholder="Select college"
+              disabled={foundCollege ? false : true}
+            >
+              {schools
+                ? schools.map((schools, i) => (
+                    <Option value={schools.name} key={i}>
+                      {schools.name}
+                    </Option>
+                  ))
+                : ""}
+            </Select>
+          </Form.Item>
+          {showOtherHobby ? (
+            <Form.Item label="Other Hobbies" name="hobbyname">
+              <Input
+                onChange={getHobbyName}
+                value={values}
+                placeholder="Add a hobby"
+              />
+              <Button type="primary" onClick={addHobby} className="mt-20">
+                Add Hobby
+              </Button>
+            </Form.Item>
+          ) : (
+            ""
+          )}
 
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
+          <Checkbox
+            onChange={onChangeOtherHobbieCheckbox}
+            className="otherHobbyCheck"
+          >
+            Other Hobbies
+          </Checkbox>
+          <Form.Item label="Hobbies" name="hobbies" className="formItem">
+            <Checkbox.Group options={hobbyOptions} onChange={onChangeSelect} />
+          </Form.Item>
+          <Form.Item
+            label="Hobbies"
+            name="hobbies"
+            rules={[
+              {
+                required: true,
+                message: "Please select atleast one hobbie!",
+              },
+            ]}
+          >
+            <Select mode="multiple">
+              {hobbies
+                ? hobbies.map((hobby, i) => (
+                    <Option key={i} disabled>
+                      {hobby}
+                    </Option>
+                  ))
+                : ""}
+            </Select>
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </Spin>
     </div>
   );
 }

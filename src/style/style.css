@@ -27,3 +27,27 @@ input[type="number"] {
 .mb-10 {
   margin-bottom: 10px;
 }
+.mt-20 {
+  margin-top: 20px;
+}
+.mb-20 {
+  margin-bottom: 20px;
+}
+.addButton {
+  border-color: #5daf48 !important;
+  background: #5daf48 !important;
+}
+.ant-spin-nested-loading > div > .ant-spin .ant-spin-dot {
+  position: absolute;
+  top: 150% !important;
+  left: 50%;
+  margin: -10px;
+}
+.formItem .ant-form-item-label {
+  padding-bottom: 50px !important;
+}
+.otherHobbyCheck {
+  position: relative;
+  bottom: -54px;
+  left: 0;
+}

@@ -1,10 +1,16 @@
-import { Button, Table } from "antd";
+import { Button, Table, Input, Row, Col, notification } from "antd";
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "../style/style.css";
+import { useState } from "react";
+import moment from "moment";
+import { useDispatch } from "react-redux";
+import { deleteUser } from "./../redux/actions/userActions";
 
 function UserListing() {
   let history = useHistory();
+  const [search, setSearch] = useState("");
+  const dispatch = useDispatch();
   const userDetails = useSelector((state) => state.createUser.userDetails);
   const redirectToUserDetails = () => {
     history.push({
@@ -16,6 +22,26 @@ function UserListing() {
       pathname: `/edit-user/${id}`,
     });
   };
+  const deleteEntry = (id) => {
+    dispatch(deleteUser(id));
+    notification.success({
+      message: "Success",
+      description: "User Deleted Successfully",
+    });
+  };
+
+  const searchValue = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const filteredData =
+    userDetails.length > 0
+      ? userDetails.filter(
+          (fdata) =>
+            fdata.name.toLowerCase().includes(search.toLowerCase()) ||
+            fdata.email.toLowerCase().includes(search.toLowerCase())
+        )
+      : [];
   const columns = [
     {
       title: "Name",
@@ -26,7 +52,10 @@ function UserListing() {
     {
       title: "Birth date",
       key: "birthDate",
-      dataIndex: "birthDate",
+      width: 120,
+      render: (text, record) => (
+        <span>{moment(record.birthDate).format("DD/MM/YYYY")}</span>
+      ),
     },
 
     {
@@ -47,6 +76,7 @@ function UserListing() {
     {
       title: "Gender",
       key: "gender",
+      width: 80,
       dataIndex: "gender",
     },
     {
@@ -61,6 +91,8 @@ function UserListing() {
     },
     {
       title: "Action",
+      width: 100,
+      fixed: "right",
       key: "action",
       render: (text, record) => (
         <span>
@@ -71,7 +103,9 @@ function UserListing() {
           >
             Edit
           </Button>
-          <Button type="danger">Delete</Button>
+          <Button type="danger" onClick={() => deleteEntry(record.id)}>
+            Delete
+          </Button>
         </span>
       ),
     },
@@ -79,16 +113,30 @@ function UserListing() {
   return (
     <div className="main">
       <h1>User Listing</h1>
-      <div className="alignRight">
-        <Button type="primary" onClick={redirectToUserDetails}>
-          Add User
-        </Button>
-      </div>
+      {console.log("fd", userDetails)}
+      <Row className="mb-20">
+        <Col span={15}>
+          {" "}
+          <Input onChange={searchValue} placeholder="Search by name or email" />
+        </Col>
+        <Col span={9} className="alignRight">
+          {" "}
+          <Button
+            type="primary"
+            onClick={redirectToUserDetails}
+            className="addButton"
+          >
+            Add User
+          </Button>
+        </Col>
+      </Row>
+
       <Table
         columns={columns}
-        dataSource={userDetails}
+        dataSource={filteredData}
         rowKey={userDetails.id}
-        className="listingTable"
+        className=""
+        scroll={{ x: 1300 }}
       />
     </div>
   );

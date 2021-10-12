@@ -3,4 +3,5 @@ export const actionType = {
   CREATE_USER: "CREATE_USER",
   EDIT_USER: "EDIT_USER",
   UPDATE_USER: "UPDATE_USER",
+  DELETE_USER: "DELETE_USER",
 };

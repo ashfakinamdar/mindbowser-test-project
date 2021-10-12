@@ -1,4 +1,5 @@
 import { actionType } from "../constants/actionTypes";
+
 export const getSchools = (schools) => {
   return {
     type: actionType.GET_SCHOOLS,
@@ -24,5 +25,12 @@ export const updateUser = (userDetails) => {
   return {
     type: actionType.UPDATE_USER,
     payload: userDetails,
+  };
+};
+
+export const deleteUser = (id) => {
+  return {
+    type: actionType.DELETE_USER,
+    payload: id,
   };
 };
