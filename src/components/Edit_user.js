@@ -41,7 +41,6 @@ function EditUserDetails() {
   const schools = useSelector((state) => state.allSchools.schools.data);
   const user = useSelector((state) => state.createUser.user);
   const [showOtherHobby, setShowOtherHobby] = useState(false);
-  const [foundCollege, setFoundCollege] = useState(false);
   const [loader, setLoader] = useState(false);
   const [date, setDate] = useState("");
   const [form] = Form.useForm();
@@ -61,7 +60,6 @@ function EditUserDetails() {
       response.data.length > 0
     ) {
       dispatch(getSchools(response));
-      setFoundCollege(true);
       setLoader(false);
     } else {
       notification.error({

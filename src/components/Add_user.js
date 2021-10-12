@@ -11,8 +11,7 @@ import {
 } from "antd";
 import { nanoid } from "nanoid";
 import "../style/style.css";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { getSchools, createUser } from "./../redux/actions/userActions";
 import { useHistory } from "react-router-dom";
@@ -106,7 +105,6 @@ function AddUser() {
         description: "Please enter a hobby",
       });
     }
-
     setValues("");
   };
   const getHobbyName = (e) => {
@@ -291,7 +289,6 @@ function AddUser() {
                 : ""}
             </Select>
           </Form.Item>
-
           <Form.Item>
             <Button type="primary" htmlType="submit">
               Submit
