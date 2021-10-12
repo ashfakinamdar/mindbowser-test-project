@@ -93,7 +93,7 @@ function UserListing() {
     {
       title: "Hobbies",
       key: "hobbies",
-      render: (text, record) => <span>{record.hobbies.join(", ")}</span>,
+      render: (text, record) => <span>{record.hobbies.join(" , ")}</span>,
     },
     {
       title: "Action",

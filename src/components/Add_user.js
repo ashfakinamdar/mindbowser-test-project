@@ -87,6 +87,12 @@ function AddUser() {
     });
   };
 
+  const goHome = () => {
+    history.push({
+      pathname: "/user-listing",
+    });
+  };
+
   const addHobby = () => {
     if (values) {
       if (hobbies.includes(values)) {
@@ -293,9 +299,12 @@ function AddUser() {
                 : ""}
             </Select>
           </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
+          <Form.Item className="mt-50">
+            <Button type="primary" htmlType="submit" className="mr-15">
               Submit
+            </Button>
+            <Button type="danger" onClick={goHome}>
+              Cancel
             </Button>
           </Form.Item>
         </Form>

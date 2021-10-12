@@ -98,6 +98,11 @@ function EditUserDetails() {
       pathname: "/user-listing",
     });
   };
+  const goHome = () => {
+    history.push({
+      pathname: "/user-listing",
+    });
+  };
   const getHobbyName = (e) => {
     setValues(e.target.value);
   };
@@ -133,7 +138,6 @@ function EditUserDetails() {
 
   useEffect(() => {
     dispatch(editUser(id));
-    setHobbies(user.hobbies);
 
     form.setFieldsValue({
       name: user.name,
@@ -311,9 +315,12 @@ function EditUserDetails() {
             </Select>
           </Form.Item>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
+          <Form.Item className="mt-50">
+            <Button type="primary" htmlType="submit" className="mr-15">
               Update
+            </Button>
+            <Button type="danger" onClick={goHome}>
+              Cancel
             </Button>
           </Form.Item>
         </Form>
