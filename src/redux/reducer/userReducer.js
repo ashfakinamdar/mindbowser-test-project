@@ -11,7 +11,7 @@ const initialState = {
       hobbies: ["Reading", "Gaming"],
       id: "TGhsy9QI7evYpuSp0jkBZ",
       name: "Ashfak Inamdar",
-      phone: "213",
+      phone: "7987666546",
     },
     {
       address:
@@ -23,7 +23,7 @@ const initialState = {
       hobbies: ["Reading", "Gaming"],
       id: "TGhsy9QI7evYpuSp0jkBZx",
       name: "James Bond",
-      phone: "213",
+      phone: "8795248965",
     },
   ],
   user: {},

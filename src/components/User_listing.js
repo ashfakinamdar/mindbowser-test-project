@@ -9,19 +9,22 @@ import { deleteUser } from "./../redux/actions/userActions";
 
 function UserListing() {
   let history = useHistory();
-  const [search, setSearch] = useState("");
   const dispatch = useDispatch();
+  const [search, setSearch] = useState("");
   const userDetails = useSelector((state) => state.createUser.userDetails);
+
   const redirectToUserDetails = () => {
     history.push({
       pathname: "/add-user",
     });
   };
+
   const editUser = (id) => {
     history.push({
       pathname: `/edit-user/${id}`,
     });
   };
+
   const deleteEntry = (id) => {
     dispatch(deleteUser(id));
     notification.success({
@@ -42,6 +45,7 @@ function UserListing() {
             fdata.email.toLowerCase().includes(search.toLowerCase())
         )
       : [];
+
   const columns = [
     {
       title: "Name",
@@ -113,7 +117,6 @@ function UserListing() {
   return (
     <div className="main">
       <h1>User Listing</h1>
-      {console.log("fd", userDetails)}
       <Row className="mb-20">
         <Col span={15}>
           {" "}
@@ -130,11 +133,10 @@ function UserListing() {
           </Button>
         </Col>
       </Row>
-
       <Table
         columns={columns}
         dataSource={filteredData}
-        rowKey={userDetails.id}
+        rowKey="name"
         className=""
         scroll={{ x: 1300 }}
       />

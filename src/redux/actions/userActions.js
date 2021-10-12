@@ -1,5 +1,6 @@
 import { actionType } from "../constants/actionTypes";
 
+// Get schools
 export const getSchools = (schools) => {
   return {
     type: actionType.GET_SCHOOLS,
@@ -7,6 +8,7 @@ export const getSchools = (schools) => {
   };
 };
 
+// Create a new user
 export const createUser = (userDetails) => {
   return {
     type: actionType.CREATE_USER,
@@ -14,6 +16,7 @@ export const createUser = (userDetails) => {
   };
 };
 
+// edit a user
 export const editUser = (id) => {
   return {
     type: actionType.EDIT_USER,
@@ -21,6 +24,7 @@ export const editUser = (id) => {
   };
 };
 
+// update a user
 export const updateUser = (userDetails) => {
   return {
     type: actionType.UPDATE_USER,
@@ -28,6 +32,7 @@ export const updateUser = (userDetails) => {
   };
 };
 
+// delete a user
 export const deleteUser = (id) => {
   return {
     type: actionType.DELETE_USER,

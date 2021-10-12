@@ -36,7 +36,6 @@ function AddUser() {
   const [loader, setLoader] = useState(false);
   const [showOtherHobby, setShowOtherHobby] = useState(false);
   const schools = useSelector((state) => state.allSchools.schools.data);
-  const userDetails = useSelector((state) => state.createUser.userDetails);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
 
@@ -178,6 +177,7 @@ function AddUser() {
                 required: true,
                 message: "Please input your phone number!",
                 whitespace: true,
+                pattern: new RegExp(/^\d{10}$/),
               },
             ]}
           >

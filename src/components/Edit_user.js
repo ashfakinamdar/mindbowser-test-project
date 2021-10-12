@@ -28,6 +28,7 @@ function EditUserDetails() {
   const { Option } = Select;
   const { Search } = Input;
   let history = useHistory();
+  const dispatch = useDispatch();
   let { id } = useParams();
   const [hobbies, setHobbies] = useState([]);
   const [hobbyOptions, setHobbyOptions] = useState([
@@ -39,7 +40,6 @@ function EditUserDetails() {
   const [values, setValues] = useState("");
   const schools = useSelector((state) => state.allSchools.schools.data);
   const user = useSelector((state) => state.createUser.user);
-  const dispatch = useDispatch();
   const [showOtherHobby, setShowOtherHobby] = useState(false);
   const [foundCollege, setFoundCollege] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -70,7 +70,6 @@ function EditUserDetails() {
       });
       setLoader(false);
     }
-    console.log("dfb", response);
   };
   const onChangeSelect = (checked) => {
     setHobbies(checked);
