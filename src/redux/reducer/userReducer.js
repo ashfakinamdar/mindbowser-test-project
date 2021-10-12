@@ -14,8 +14,7 @@ const initialState = {
       phone: "7987666546",
     },
     {
-      address:
-        "Online Productivity Solutions,,Casa de Alegria S-1, Second Floor,\nVerna Panchayat ,SFX Circle",
+      address: "USA",
       birthDate: "05/10/2021",
       college: "American University of Middle East",
       email: "kapoorharshad2012@gmail.com",

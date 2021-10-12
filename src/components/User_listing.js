@@ -57,9 +57,7 @@ function UserListing() {
       title: "Birth date",
       key: "birthDate",
       width: 120,
-      render: (text, record) => (
-        <span>{moment(record.birthDate).format("DD/MM/YYYY")}</span>
-      ),
+      render: (text, record) => <span>{record.birthDate}</span>,
     },
 
     {

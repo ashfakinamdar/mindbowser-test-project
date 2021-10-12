@@ -175,7 +175,6 @@ function AddUser() {
                 required: true,
                 message: "Please input your phone number!",
                 whitespace: true,
-                pattern: new RegExp(/^\d{10}$/),
               },
             ]}
           >
@@ -246,7 +245,10 @@ function AddUser() {
             </Select>
           </Form.Item>
           {showOtherHobby ? (
-            <Form.Item label="Other Hobbies" name="hobbyname">
+            <Form.Item
+              label="Other Hobbies"
+              // name="hobbyname"
+            >
               <Input
                 onChange={getHobbyName}
                 value={values}

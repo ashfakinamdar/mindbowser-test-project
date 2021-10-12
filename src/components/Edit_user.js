@@ -39,6 +39,7 @@ function EditUserDetails() {
   ]);
   const [values, setValues] = useState("");
   const schools = useSelector((state) => state.allSchools.schools.data);
+
   const user = useSelector((state) => state.createUser.user);
   const [showOtherHobby, setShowOtherHobby] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -128,6 +129,7 @@ function EditUserDetails() {
 
   useEffect(() => {
     dispatch(editUser(id));
+    setHobbies(user.hobbies);
 
     form.setFieldsValue({
       name: user.name,
@@ -139,10 +141,11 @@ function EditUserDetails() {
       birthDate: moment(user.birthDate),
       hobbies: user.hobbies,
     });
-  }, [user]);
+  }, [user, form, id, dispatch]);
 
   return (
     <div className="container">
+      {console.log("dv", hobbies)}
       <Spin spinning={loader}>
         <h1>Edit User</h1>
         <Form layout="vertical" onFinish={onFinish} form={form}>
@@ -258,7 +261,7 @@ function EditUserDetails() {
             </Select>
           </Form.Item>
           {showOtherHobby ? (
-            <Form.Item label="Other Hobbies" name="hobbyname">
+            <Form.Item label="Other Hobbies">
               <Input
                 onChange={getHobbyName}
                 value={values}
