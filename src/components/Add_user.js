@@ -11,6 +11,7 @@ import {
 } from "antd";
 import { nanoid } from "nanoid";
 import "../style/style.css";
+import moment from "moment";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { getSchools, createUser } from "./../redux/actions/userActions";
@@ -66,7 +67,7 @@ function AddUser() {
   const onFinish = (values) => {
     var payload = {
       address: values.address,
-      birthDate: date,
+      birthDate: moment(date).format("DD/MM/YYYY"),
       college: values.college,
       gender: values.gender,
       id: nanoid(),

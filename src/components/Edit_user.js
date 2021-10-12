@@ -85,11 +85,15 @@ function EditUserDetails() {
         college: values.college,
         id: user.id,
         hobbies: values.hobbies,
-        birthDate: moment(values.birthDate).format("DD/MM/YYYY"),
+        birthDate: date ? moment(date).format("DD/MM/YYYY") : user.birthDate,
       });
     }
 
     dispatch(updateUser(values));
+    notification.success({
+      message: "Success",
+      description: "User Updated Successfully",
+    });
     history.push({
       pathname: "/user-listing",
     });

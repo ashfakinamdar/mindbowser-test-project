@@ -51,13 +51,16 @@ function UserListing() {
       title: "Name",
       width: 100,
       key: "name",
+      fixed: "left",
       dataIndex: "name",
     },
     {
       title: "Birth date",
       key: "birthDate",
       width: 120,
-      render: (text, record) => <span>{record.birthDate}</span>,
+      render: (text, record) => (
+        <span>{moment(record.birthDate).format("DD/MM/YYYY")}</span>
+      ),
     },
 
     {
@@ -68,6 +71,7 @@ function UserListing() {
     {
       title: "Phone",
       key: "phone",
+      width: 110,
       dataIndex: "phone",
     },
     {
