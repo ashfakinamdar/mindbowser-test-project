@@ -194,7 +194,8 @@ function EditUserDetails() {
             rules={[
               {
                 required: true,
-                message: "Please input your phone number!",
+                message: "Please input your 10 digit phone number!",
+                pattern: new RegExp("^[2-9]{2}[0-9]{8}$"),
               },
             ]}
           >
