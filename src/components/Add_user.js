@@ -35,6 +35,7 @@ function AddUser() {
   const [foundCollege, setFoundCollege] = useState(false);
   const [loader, setLoader] = useState(false);
   const [showOtherHobby, setShowOtherHobby] = useState(false);
+  const userDetails = useSelector((state) => state.createUser.userDetails);
   const schools = useSelector((state) => state.allSchools.schools.data);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
@@ -65,6 +66,22 @@ function AddUser() {
     }
   };
   const onFinish = (values) => {
+    const existsEmail = userDetails.find((p) => p.email === values.email);
+    const existsPhone = userDetails.find((p) => p.phone === values.phoneNumber);
+    if (existsEmail) {
+      notification.error({
+        message: "Error",
+        description: "User with the same email already exists",
+      });
+      return;
+    }
+    if (existsPhone) {
+      notification.error({
+        message: "Error",
+        description: "User with the same phone number already exists",
+      });
+      return;
+    }
     var payload = {
       address: values.address,
       birthDate: moment(date).format("DD/MM/YYYY"),

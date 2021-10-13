@@ -42,7 +42,7 @@ function EditUserDetails() {
   ]);
   const [values, setValues] = useState("");
   const schools = useSelector((state) => state.allSchools.schools.data);
-
+  const userDetails = useSelector((state) => state.createUser.userDetails);
   const user = useSelector((state) => state.createUser.user);
   const [showOtherHobby, setShowOtherHobby] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -213,7 +213,7 @@ function EditUserDetails() {
               },
             ]}
           >
-            <Input />
+            <Input disabled />
           </Form.Item>
           <Form.Item
             label="Phone Number"
@@ -226,7 +226,7 @@ function EditUserDetails() {
               },
             ]}
           >
-            <Input type="number" />
+            <Input type="number" disabled />
           </Form.Item>
           <Form.Item
             label="Address"
