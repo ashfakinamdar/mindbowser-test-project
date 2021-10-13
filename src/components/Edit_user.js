@@ -172,7 +172,6 @@ function EditUserDetails() {
 
   return (
     <div className="container">
-      {console.log("dbf", hobbies)}
       <Spin spinning={loader}>
         <h1>Edit User</h1>
         <Form layout="vertical" onFinish={onFinish} form={form}>
@@ -310,30 +309,8 @@ function EditUserDetails() {
           >
             Add more hobbies
           </Checkbox>
-
-          {/* <Form.Item label="Hobbies" name="hobbies" className="formItem">
-            <Checkbox.Group options={hobbyOptions} onChange={onChangeSelect} />
-          </Form.Item> */}
-
-          <Form.Item
-            label="Hobbies"
-            // name="hobbies"
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: "Please select atleast one hobbie!",
-            //   },
-            // ]}
-          >
-            {/* <Select mode="multiple">
-              {hobbies
-                ? hobbies.map((hobby, i) => (
-                    <Option key={i} disabled>
-                      {hobby}
-                    </Option>
-                  ))
-                : ""}
-            </Select> */}
+          <Form.Item label="Hobbies">
+            {" "}
             <div className="mb-10">
               <Tag color="orange">
                 Select "Add more hobbies" checkbox to add more hobbies
