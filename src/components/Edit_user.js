@@ -8,12 +8,15 @@ import {
   notification,
   Spin,
   Tag,
+  Row,
+  Col,
 } from "antd";
 import "../style/style.css";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import { CloseCircleOutlined } from "@ant-design/icons";
 import {
   getSchools,
   editUser,
@@ -74,7 +77,20 @@ function EditUserDetails() {
     setHobbies(checked);
   };
 
+  const removeHobby = (i) => {
+    let newHobbies = [];
+    newHobbies = hobbies.filter((hobby) => hobby !== hobbies[i]);
+    setHobbies(newHobbies);
+  };
+
   const onFinish = (values) => {
+    if (hobbies.length <= 0) {
+      notification.warning({
+        message: "Notice",
+        description: "Please enter atleast one hobby",
+      });
+      return;
+    }
     if (user != null) {
       Object.assign(values, {
         name: values.name,
@@ -84,7 +100,7 @@ function EditUserDetails() {
         gender: values.gender,
         college: values.college,
         id: user.id,
-        hobbies: values.hobbies,
+        hobbies: hobbies,
         birthDate: date ? moment(date).format("DD/MM/YYYY") : user.birthDate,
       });
     }
@@ -104,7 +120,10 @@ function EditUserDetails() {
     });
   };
   const getHobbyName = (e) => {
-    setValues(e.target.value);
+    let enteredHobby = "";
+    enteredHobby = e.target.value;
+
+    setValues(enteredHobby);
   };
   const addHobby = () => {
     if (values) {
@@ -138,7 +157,7 @@ function EditUserDetails() {
 
   useEffect(() => {
     dispatch(editUser(id));
-
+    setHobbies(user.hobbies);
     form.setFieldsValue({
       name: user.name,
       email: user.email,
@@ -147,13 +166,13 @@ function EditUserDetails() {
       gender: user.gender,
       college: user.college,
       birthDate: moment(user.birthDate),
-      hobbies: user.hobbies,
+      hobbies: hobbies,
     });
   }, [user, form, id, dispatch]);
 
   return (
     <div className="container">
-      {console.log("dv", hobbies)}
+      {console.log("dbf", hobbies)}
       <Spin spinning={loader}>
         <h1>Edit User</h1>
         <Form layout="vertical" onFinish={onFinish} form={form}>
@@ -275,6 +294,7 @@ function EditUserDetails() {
                 onChange={getHobbyName}
                 value={values}
                 placeholder="Add a hobby"
+                className="toLowerCase"
               />
               <Button type="primary" onClick={addHobby} className="mt-20">
                 Add Hobby
@@ -286,25 +306,26 @@ function EditUserDetails() {
 
           <Checkbox
             onChange={onChangeOtherHobbieCheckbox}
-            className="otherHobbyCheck"
+            className="otherHobbyCheckEdit"
           >
-            Other Hobbies
+            Add more hobbies
           </Checkbox>
-          <Form.Item label="Hobbies" name="hobbies" className="formItem">
+
+          {/* <Form.Item label="Hobbies" name="hobbies" className="formItem">
             <Checkbox.Group options={hobbyOptions} onChange={onChangeSelect} />
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item
             label="Hobbies"
-            name="hobbies"
-            rules={[
-              {
-                required: true,
-                message: "Please select atleast one hobbie!",
-              },
-            ]}
+            // name="hobbies"
+            // rules={[
+            //   {
+            //     required: true,
+            //     message: "Please select atleast one hobbie!",
+            //   },
+            // ]}
           >
-            <Select mode="multiple">
+            {/* <Select mode="multiple">
               {hobbies
                 ? hobbies.map((hobby, i) => (
                     <Option key={i} disabled>
@@ -312,7 +333,27 @@ function EditUserDetails() {
                     </Option>
                   ))
                 : ""}
-            </Select>
+            </Select> */}
+            <div className="mb-10">
+              <Tag color="orange">
+                Select "Add more hobbies" checkbox to add more hobbies
+              </Tag>
+            </div>
+            <Row gutter={16}>
+              {hobbies && hobbies.length && hobbies.length > 0 ? (
+                hobbies.map((hobby, i) => (
+                  <Col span={6} key={i} className="hobbyRemoveButton">
+                    <div>{hobby}</div>
+                    <CloseCircleOutlined
+                      onClick={() => removeHobby(i)}
+                      className="hobbyRemoveIcon"
+                    />
+                  </Col>
+                ))
+              ) : (
+                <Tag color="red">Please add atleast one hobby</Tag>
+              )}
+            </Row>
           </Form.Item>
 
           <Form.Item className="mt-50">
