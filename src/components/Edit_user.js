@@ -42,7 +42,6 @@ function EditUserDetails() {
   ]);
   const [values, setValues] = useState("");
   const schools = useSelector((state) => state.allSchools.schools.data);
-  const userDetails = useSelector((state) => state.createUser.userDetails);
   const user = useSelector((state) => state.createUser.user);
   const [showOtherHobby, setShowOtherHobby] = useState(false);
   const [loader, setLoader] = useState(false);
