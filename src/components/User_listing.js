@@ -138,7 +138,7 @@ function UserListing() {
       <Table
         columns={columns}
         dataSource={filteredData}
-        rowKey="name"
+        rowKey={(record) => record.id}
         className=""
         scroll={{ x: 1300 }}
       />
