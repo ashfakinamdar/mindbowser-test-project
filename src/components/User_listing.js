@@ -11,6 +11,7 @@ function UserListing() {
   let history = useHistory();
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
+  const [newArr, setNewArr] = useState([]);
   const userDetails = useSelector((state) => state.createUser.userDetails);
 
   const redirectToUserDetails = () => {
@@ -37,14 +38,24 @@ function UserListing() {
     setSearch(e.target.value);
   };
 
-  const filteredData =
-    userDetails.length > 0
-      ? userDetails.filter(
-          (fdata) =>
-            fdata.name.toLowerCase().includes(search.toLowerCase()) ||
-            fdata.email.toLowerCase().includes(search.toLowerCase())
-        )
-      : [];
+  const filteredData = () => {
+    let filteredDataNew = [];
+    filteredDataNew =
+      userDetails.length > 0
+        ? userDetails.filter(
+            (fdata) =>
+              fdata.name.toLowerCase().includes(search.toLowerCase()) ||
+              fdata.email.toLowerCase().includes(search.toLowerCase())
+          )
+        : [];
+
+    return setNewArr(filteredDataNew);
+  };
+
+  const resetSearch = () => {
+    setNewArr([]);
+    setSearch([]);
+  };
 
   const columns = [
     {
@@ -120,9 +131,27 @@ function UserListing() {
     <div className="main">
       <h1>User Listing</h1>
       <Row className="mb-20">
-        <Col span={15}>
+        <Col span={15} style={{ display: "flex" }}>
           {" "}
-          <Input onChange={searchValue} placeholder="Search by name or email" />
+          <Input
+            onChange={searchValue}
+            value={search}
+            placeholder="Search by name or email"
+          />
+          <Button
+            type="primary"
+            onClick={filteredData}
+            className="searchButton ml-10"
+          >
+            Search
+          </Button>
+          <Button
+            type="primary"
+            onClick={resetSearch}
+            className="resetButton ml-10"
+          >
+            Reset
+          </Button>
         </Col>
         <Col span={9} className="alignRight">
           {" "}
@@ -137,7 +166,9 @@ function UserListing() {
       </Row>
       <Table
         columns={columns}
-        dataSource={filteredData}
+        dataSource={
+          newArr && newArr.length && newArr.length > 0 ? newArr : userDetails
+        }
         rowKey={(record) => record.id}
         className=""
         scroll={{ x: 1300 }}
